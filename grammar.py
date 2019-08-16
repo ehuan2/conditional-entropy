@@ -1,4 +1,5 @@
 import json
+import math
 import numpy as np 
 from scipy.sparse import csc_matrix
 from scipy.sparse.linalg import inv
@@ -17,7 +18,7 @@ class Production(object):
         else:
             self.rhs = (prod[-2], prod[-1])
             self.unary = False
-        self.prob = float(prod[0]) / float(prod[2])  # TODO: improve accuracy
+        self.prob = float(prod[0]) / float(prod[2])  # TODO(fhs): improve accuracy
         self.lexical = self.unary and (prod[-1][0] == prod[-1][-1] == '"')
         if self.lexical:
             self.rhs = (self.rhs[0][1:-1], )
@@ -53,16 +54,16 @@ class PCFG(object):
                 self.non_lexical_prods.append(production)
         self.productions_by_node = dict()
         self.non_lexical_prods_by_node = dict()
-        self.nt2idx = dict()
-        self.idx2nt = list()
+        self.nt2idx = dict()    # non-terminal to index
+        self.idx2nt = list()    # index to non-terminal
         self.basic_entropy = list()
 
     """assuming there is no left cycle, do topological sort"""
-    def _topological_sort(self):
+    def _topological_sort(self, productions):
         in_cnt = np.zeros(len(self.idx2nt), dtype=np.int32)
         sorted_prods = list()
         non_terminals = list()
-        for production in self.non_lexical_prods:
+        for production in productions:
             rhs = production.rhs[0]
             in_cnt[self.nt2idx[rhs]] += 1
         candidates = list()
@@ -73,18 +74,21 @@ class PCFG(object):
         while len(candidates) != 0:
             candidate = candidates[0]
             non_terminals.append(candidate)
-            for production in self.non_lexical_prods_by_node.get(
-                    candidate, []):
+            for production in self.productions_by_node[candidate]:
+                if production.lexical:
+                    continue
                 sorted_prods.append(production)
                 rhs = production.rhs[0]
                 in_cnt[self.nt2idx[rhs]] -= 1
                 if in_cnt[self.nt2idx[rhs]] == 0:
                     candidates.append(rhs)
             candidates = candidates[1:]
+        for item in self.idx2nt:
+            if item not in non_terminals:
+                non_terminals.append(item)
         sorted_prods.reverse()
         non_terminals.reverse()
-        self.non_lexical_prods = sorted_prods
-        self.idx2nt = non_terminals
+        return sorted_prods, non_terminals
     
     def __getitem__(self, index):
         return self.productions[index]
@@ -96,32 +100,31 @@ class PCFG(object):
     def reorganize(self):
         for production in self.productions:
             lhs = production.lhs
-            if lhs not in self.nt2idx:
-                self.idx2nt.append(lhs)
-                idx = len(self.nt2idx)
-                self.nt2idx[lhs] = idx
-            if not production.lexical:
-                if lhs not in self.non_lexical_prods_by_node:
-                    self.non_lexical_prods_by_node[lhs] = list()
-                self.non_lexical_prods_by_node[lhs].append(production)
-            else:
-                if lhs not in self.productions_by_node:
-                    self.productions_by_node[lhs] = list()
-                self.productions_by_node[lhs].append(production)
-        # topological sort for the non-lexical productions
-        self._topological_sort()
-        for idx, node in enumerate(self.idx2nt):
-            self.nt2idx[node] = idx
-        # add sorted non-lexical productions to production-by-node info
-        self.non_lexical_prods_by_node = dict()
-        for production in self.non_lexical_prods:
-            lhs = production.lhs
+            rhs = production.rhs
             if lhs not in self.productions_by_node:
                 self.productions_by_node[lhs] = list()
             self.productions_by_node[lhs].append(production)
-            if lhs not in self.non_lexical_prods_by_node:
-                self.non_lexical_prods_by_node[lhs] = list()
-            self.non_lexical_prods_by_node[lhs].append(production)
+            if production.lexical:
+                continue
+            if rhs[0] not in self.productions_by_node:
+                self.productions_by_node[rhs[0]] = list()
+            if len(rhs) == 2 and rhs[1] not in self.productions_by_node:
+                self.productions_by_node[rhs[1]] = list()
+        for node in self.productions_by_node:
+            self.idx2nt.append(node)
+            idx = len(self.nt2idx)
+            self.nt2idx[node] = idx
+        # topological sort for the non-lexical productions
+        self.non_lexical_prods, self.idx2nt = self._topological_sort(self.non_lexical_prods)
+        for idx, node in enumerate(self.idx2nt):
+            self.nt2idx[node] = idx
+        for node in self.idx2nt:
+            self.non_lexical_prods_by_node[node] = list()
+            if node not in self.productions_by_node:
+                self.productions_by_node[node] = list()
+            for production in self.productions_by_node[node]:
+                if not production.lexical:
+                    self.non_lexical_prods_by_node[node].append(production)
 
     """calculate entropy for each node"""
     def calc_entropy(self):
@@ -158,6 +161,7 @@ class PCFG(object):
 
 """unit test"""
 if __name__ == "__main__":
+    sentence = "Mr. Pierre Vinken , 61 years old , will join this group"
     grammar = PCFG('./data/rlr_800.wmcfg')
     grammar.reorganize()
     grammar.calc_entropy()
