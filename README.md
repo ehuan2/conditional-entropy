@@ -17,15 +17,15 @@ python compute.py -s "Jon hit the dog with a stick" -g ./data/strauss.pcfg
 ```
 
 ## FAQs
-- Why the entropy/probability is Nan? <br>
+- Why the entropy/probability is NaN? <br>
     - Check if all words in your sentences appear in your given grammar. 
 
 - Why RuntimeError? <br>
-    - Check if the given grammar is *consistent* (i.e., the probability of all generated sentences from the root node `S` sums up to 1). The current system does not support inconsistent grammars. 
+    - Check if the given grammar is *consistent* (i.e., the probability of all generated sentences from the root node (`S` by default) sums up to 1). The current system does not support inconsistent grammars. 
     - Check if there is left recursion in your grammar using ``check_left_recursion.py``. For more details about why removing left recursions, see [Hale (2003)](http://www.umiacs.umd.edu/~ymarton/ling849b/hale2003.pdf). 
 
 - Does the current calculator support empty terminal?
-    - No, but it is possible to extend it by simply modifying some code in `calc_inside` and `conditional_entropy`.
+    - No, but it is possible to extend it by simply modifying some code of the functions `calc_inside` and `conditional_entropy`.
 
 ## Acknowledgement
 This tool calculates PCFG conditional entropy defined by [Hale(2003)](http://www.umiacs.umd.edu/~ymarton/ling849b/hale2003.pdf), as [CCPC](https://github.com/timhunter/ccpc) does. 
