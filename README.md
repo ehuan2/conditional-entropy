@@ -13,7 +13,7 @@ scipy >= 1.2.1 <br>
 
 ## Demo
 ```
-python compute.py -s "Jon hit the dog with a stick" -g ./data/strauss.pcfg
+python compute.py -s "Jon hit the dog with the stick" -g ./data/strauss.pcfg
 ```
 
 ## FAQs
