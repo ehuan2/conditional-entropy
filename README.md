@@ -4,13 +4,17 @@ A fast, easy-to-install and parallelable PCFG conditional probability and condit
 
 
 
-Beta version. Check the [FAQs](#FAQs) if the program went wrong. 
-<br>
-Please [contact the author](mailto:freda@ttic.edu) or directly raise an issue in this repo if you had questions or comments. 
+Beta version. If something went wrong, please first check the [FAQs](#FAQs) if the something went wrong. <br>
+Feel free to [contact the author](mailto:freda@ttic.edu) or directly raise an issue in this repo if you had questions or comments. 
 
 ## Dependencies
-Python >= 3.7
+Python >= 3.7 <br>
+scipy >= 1.2.1 <br>
 
+## Demo
+```
+python compute.py -s "Jon hit the dog with a stick" -g ./data/strauss.pcfg
+```
 
 ## FAQs
 - Why the entropy/probability is Nan? <br>
@@ -25,3 +29,4 @@ Python >= 3.7
 
 ## Acknowledgement
 This tool calculates PCFG conditional entropy defined by [Hale(2003)](http://www.umiacs.umd.edu/~ymarton/ling849b/hale2003.pdf), as [CCPC](https://github.com/timhunter/ccpc) does. 
+The example data are from [CCPC](https://github.com/timhunter/ccpc).
