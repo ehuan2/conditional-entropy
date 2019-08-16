@@ -30,6 +30,16 @@ python compute.py -s "Jon hit the dog with the stick" -g ./data/strauss.pcfg
 - Does the current calculator support empty terminal?
     - No, but it is possible to extend it by simply modifying some code of the functions `calc_inside` and `conditional_entropy`.
 
+## Citation
+if you found the tool useful, please consider citing it as follows before an accompanying paper is ready:
+```
+@software{shi2019pcfg,
+  author = {Haoyue Shi},
+  title = {PCFG Conditional Entropy Calculator},
+  url = {https://github.com/explorerfreda/conditional-entropy}
+}
+```
+
 ## Acknowledgement
 This tool calculates PCFG conditional entropy defined by [Hale(2003)](http://www.umiacs.umd.edu/~ymarton/ling849b/hale2003.pdf), as [CCPC](https://github.com/timhunter/ccpc) does. 
 The example data are from [CCPC](https://github.com/timhunter/ccpc).
