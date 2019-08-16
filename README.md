@@ -4,8 +4,7 @@ A fast, easy-to-install and scalable PCFG conditional probability and conditiona
 
 
 
-Beta version. If something went wrong, please first check the [FAQs](#FAQs) if the something went wrong. <br>
-Feel free to [contact the author](mailto:freda@ttic.edu) or directly raise an issue in this repo if you had questions or comments. 
+Beta version. If something went wrong, please first check the [FAQs](#FAQs) and feel free to [contact the author](mailto:freda@ttic.edu) or directly raise an issue in this repo if you had questions or comments. 
 
 ## Dependencies
 Python >= 3.7 <br>
@@ -13,7 +12,7 @@ scipy >= 1.2.1 <br>
 
 ## Demo
 ```
-python compute.py -s "Jon hit the dog with a stick" -g ./data/strauss.pcfg
+python compute.py -s "Jon hit the dog with the stick" -g ./data/strauss.pcfg
 ```
 
 ## FAQs
@@ -22,7 +21,11 @@ python compute.py -s "Jon hit the dog with a stick" -g ./data/strauss.pcfg
 
 - Why RuntimeError? <br>
     - Check if the given grammar is *consistent* (i.e., the probability of all generated sentences from the root node (`S` by default) sums up to 1). The current system does not support inconsistent grammars. 
-    - Check if there is left recursion in your grammar using ``check_left_recursion.py``. For more details about why removing left recursions, see [Hale (2003)](http://www.umiacs.umd.edu/~ymarton/ling849b/hale2003.pdf). 
+    
+- Does the current calculator support grammars with left reecursions?
+    - Yes! 
+    - Check if there is left recursion in your grammar using ``check_left_recursion.py``. 
+    For more details about what left recursion is and why it matters, see [Hale (2003)](http://www.umiacs.umd.edu/~ymarton/ling849b/hale2003.pdf) and the [Wikipedia page](https://en.wikipedia.org/wiki/Left_recursion). 
 
 - Does the current calculator support empty terminal?
     - No, but it is possible to extend it by simply modifying some code of the functions `calc_inside` and `conditional_entropy`.
