@@ -22,7 +22,10 @@ python compute.py -s "Jon hit the dog with a stick" -g ./data/strauss.pcfg
 
 - Why RuntimeError? <br>
     - Check if the given grammar is *consistent* (i.e., the probability of all generated sentences from the root node (`S` by default) sums up to 1). The current system does not support inconsistent grammars. 
-    - Check if there is left recursion in your grammar using ``check_left_recursion.py``. For more details about why removing left recursions, see [Hale (2003)](http://www.umiacs.umd.edu/~ymarton/ling849b/hale2003.pdf). 
+    
+- Does the current calculator support grammars with left reecursions?
+    - Yes! Check if there is left recursion in your grammar using ``check_left_recursion.py``. 
+    - For more details about what left recursion is and why it matters, see [Hale (2003)](http://www.umiacs.umd.edu/~ymarton/ling849b/hale2003.pdf) and the [Wikipedia page](https://en.wikipedia.org/wiki/Left_recursion). 
 
 - Does the current calculator support empty terminal?
     - No, but it is possible to extend it by simply modifying some code of the functions `calc_inside` and `conditional_entropy`.
