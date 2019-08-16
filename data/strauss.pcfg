@@ -1,0 +1,15 @@
+1 / 1 S  --> np vp
+1 / 1 vp --> v1
+1 / 4 v1 --> v1 pp
+3 / 4 v1 --> v  np
+1 / 1 pp --> p  np
+1 / 4 np --> pn
+3 / 4 np --> dt n1
+3 / 4 n1 --> n
+1 / 4 n1 --> n1 pp
+1 / 1 v  --> "hit"
+1 / 1 pn --> "Jon"
+1 / 2 n  --> "dog"
+1 / 2 n  --> "stick"
+1 / 1 p  --> "with"
+1 / 1 dt --> "the"
