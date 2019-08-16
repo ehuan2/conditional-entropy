@@ -4,7 +4,7 @@ A fast, easy-to-install and scalable PCFG conditional probability and conditiona
 
 
 
-Beta version. If something went wrong, please first check the [FAQs](#FAQs) if the something went wrong. <br>
+Beta version. If something went wrong, please first check the [FAQs](#FAQs) if something went wrong. <br>
 Feel free to [contact the author](mailto:freda@ttic.edu) or directly raise an issue in this repo if you had questions or comments. 
 
 ## Dependencies
