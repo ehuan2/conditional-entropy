@@ -1,6 +1,6 @@
 # PCFG Conditional Entropy Calculator
 
-A fast, easy-to-install and parallelable PCFG conditional probability and conditional entropy calculator. 
+A fast, easy-to-install and scalable PCFG conditional probability and conditional entropy calculator. 
 
 
 
