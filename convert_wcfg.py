@@ -54,11 +54,18 @@ def to_chomsky_normal_form(graph):
 
 
 
-def output_pcfg(graph, output):
+def output_pcfg(graph, output, input_sentence=None):
     with open(output, 'w') as file:
         for key in graph.keys():
             total_weight = sum(weight for weight, _ in graph[key])
+
             for weight, rule in graph[key]:
+                # check if the rule is indeed a literal
+                is_literal = (rule.strip("'") != rule or rule.strip('"')) and len(rule.split(' ')) == 1
+                
+                if input_sentence is not None and is_literal:
+                    if rule.strip("'") not in input_sentence.split(' ') and rule.strip('"') not in input_sentence.split(' '):
+                        continue
                 sentence = f'{weight} / {total_weight} {key} --> {rule}\n'
                 file.write(sentence)
 
@@ -67,8 +74,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--input', required=True)
     parser.add_argument('--output', required=True)
+    parser.add_argument('-s', '--sentence')
     args = parser.parse_args()
 
     graph = parse_wcfg(args.input)
     graph = to_chomsky_normal_form(graph)
-    output_pcfg(graph, args.output)
+
+    output_pcfg(graph, args.output, args.sentence if args.sentence else None)
+
