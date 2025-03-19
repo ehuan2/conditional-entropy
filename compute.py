@@ -1,5 +1,4 @@
 import argparse
-import sys
 
 from grammar import PCFG
 from entropy import calc_inside, conditional_entropy
@@ -37,12 +36,7 @@ if __name__ == '__main__':
         ent_end = h[grammar.nt2idx[args.root]][0][i]
         prob = prob_notend + prob_end
 
-        ent = (
-            prob_end / (prob * ent_end) +
-            prob_notend / (prob * ent_notend) +
-            entropy(
-                ([prob_end / prob] if prob_end > 0 else []) +
-                [prob_notend / prob] if prob_notend > 0 else []
-            )
-        )
+        ent = prob_end / prob * ent_end + prob_notend / prob * ent_notend + \
+            entropy(([prob_end / prob] if prob_end > 0 else []) +
+                [prob_notend / prob] if prob_notend > 0 else [])
         print(output_format.format(prob, ent, args.sentence[i]))
