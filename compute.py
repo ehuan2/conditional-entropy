@@ -38,8 +38,8 @@ if __name__ == '__main__':
         prob = prob_notend + prob_end
 
         ent = (
-            prob_end / (prob * ent_end + sys.float_info.epsilon) +
-            prob_notend / (prob * ent_notend + sys.float_info.epsilon) +
+            prob_end / (prob * ent_end) +
+            prob_notend / (prob * ent_notend) +
             entropy(
                 ([prob_end / prob] if prob_end > 0 else []) +
                 [prob_notend / prob] if prob_notend > 0 else []
