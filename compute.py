@@ -14,12 +14,17 @@ if __name__ == '__main__':
     args.sentence = args.sentence.split()
 
     grammar = PCFG(args.grammar)
+    print(f'Finished building grammar')
     grammar.reorganize()
+    print(f'Finished reorganizing grammar')
     grammar.calc_entropy()
+    print(f'Finished calculating entropy')
     p, h = calc_inside(grammar, args.sentence)
+    print(f'Finished calc_inside')
     probs_notend, ents_notend = conditional_entropy(
         grammar, p, h, len(args.sentence), args.root
     )
+    print(f'Finished conditional_entropy')
 
     output_title = 'Prob \t\t Entropy \t Word'
     output_format = '{:.4f} \t\t {:.4f} \t {:s}'
