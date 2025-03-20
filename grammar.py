@@ -171,6 +171,7 @@ class PCFG(object):
         matrix = csc_matrix((data, (rows, cols)), 
             shape=(len(self.idx2nt), len(self.idx2nt)))
         
+        print(len(self.idx2nt))
         print(f"Matrix is finished...")
         matrix = inv(matrix)
         print(f"Matrix inverse calculated")
