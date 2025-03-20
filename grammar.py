@@ -102,8 +102,10 @@ class PCFG(object):
         for production in self.productions:
             lhs = production.lhs
             rhs = production.rhs
+
             if lhs not in self.productions_by_node:
                 self.productions_by_node[lhs] = list()
+
             self.productions_by_node[lhs].append(production)
             if production.lexical:
                 continue
@@ -111,10 +113,14 @@ class PCFG(object):
                 self.productions_by_node[rhs[0]] = list()
             if len(rhs) == 2 and rhs[1] not in self.productions_by_node:
                 self.productions_by_node[rhs[1]] = list()
+
+        print(len(self.productions_by_node))
+
         for node in self.productions_by_node:
             self.idx2nt.append(node)
             idx = len(self.nt2idx)
             self.nt2idx[node] = idx
+
         # topological sort for the non-lexical productions
         self.non_lexical_prods, self.idx2nt = self._topological_sort(self.non_lexical_prods)
         for idx, node in enumerate(self.idx2nt):
