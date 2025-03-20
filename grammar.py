@@ -19,7 +19,7 @@ class Production(object):
             self.rhs = (prod[-2], prod[-1])
             self.unary = False
         self.prob = float(prod[0]) / float(prod[2])  # TODO(fhs): improve accuracy
-        self.lexical = self.unary and (prod[-1][0] == prod[-1][-1] and prod[-1][0] in ['"', "'"])
+        self.lexical = self.unary and (prod[-1][0] == prod[-1][-1] == '"')
         if self.lexical:
             self.rhs = (self.rhs[0][1:-1], )
     
