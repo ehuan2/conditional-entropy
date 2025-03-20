@@ -19,7 +19,7 @@ class Production(object):
             self.rhs = (prod[-2], prod[-1])
             self.unary = False
         self.prob = float(prod[0]) / float(prod[2])  # TODO(fhs): improve accuracy
-        self.lexical = self.unary and (prod[-1][0] == prod[-1][-1] == '"')
+        self.lexical = self.unary and (prod[-1][0] == prod[-1][-1] and prod[-1][0] in ['"', "'"])
         if self.lexical:
             self.rhs = (self.rhs[0][1:-1], )
     
@@ -48,6 +48,7 @@ class PCFG(object):
         for line in lines:
             self.productions.append(Production(line.strip('[')))
         for production in self.productions:
+            # print(production)
             if production.lexical:
                 self.lexical_prods.append(production)
             else:
@@ -134,10 +135,16 @@ class PCFG(object):
             for production in self.productions_by_node[node]:
                 probs.append(production.prob)
             self.basic_entropy.append(entropy(probs))
+
+        print("Finished calculating basic entropy")
         # sparse matrix for (I-A), where H = (I-A)^{-1} h
         mat_dict = dict()
         for i in range(len(self.idx2nt)):
             mat_dict[(i, i)] = 1
+
+        print("Finished the matrix dictionary multiplication")
+
+
         for node in self.idx2nt:
             for production in self.non_lexical_prods_by_node.get(node, []):
                 left_idx = self.nt2idx[node]
@@ -146,17 +153,29 @@ class PCFG(object):
                     if (left_idx, right_idx) not in mat_dict:
                         mat_dict[(left_idx, right_idx)] = 0
                     mat_dict[(left_idx, right_idx)] -= production.prob
+
+        print("Finished populating the matrix dicitonary multiplication")
+
         rows = list()
         cols = list()
         data = list()
+
         for left_idx, right_idx in mat_dict:
             rows.append(left_idx)
             cols.append(right_idx)
             data.append(mat_dict[(left_idx, right_idx)])
+        print("Finished the matrix dictionary appending to rows and columns")
+        
+        mat_dict = None
+        
         matrix = csc_matrix((data, (rows, cols)), 
             shape=(len(self.idx2nt), len(self.idx2nt)))
+        
+        print(f"Matrix is finished...")
         matrix = inv(matrix)
+        print(f"Matrix inverse calculated")
         self.node_entropy = matrix * np.array(self.basic_entropy)
+        print(f"Calculated the basic entropy")
 
 
 """unit test"""

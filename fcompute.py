@@ -17,12 +17,17 @@ if __name__ == '__main__':
     args.sentence = open(args.input).readlines()[0].strip().split()
 
     grammar = PCFG(args.grammar)
+    print(f'Finished building grammar')
     grammar.reorganize()
+    print(f'Finished reorganizing grammar')
     grammar.calc_entropy()
+    print(f'Finished calculating entropy')
     p, h = calc_inside(grammar, args.sentence)
+    print(f'Finished calc_inside')
     probs_notend, ents_notend = conditional_entropy(
         grammar, p, h, len(args.sentence), args.root
     )
+    print(f'Finished conditional_entropy')
 
     probs = list([1.0])
     ents = list([grammar.node_entropy[grammar.nt2idx[args.root]]])

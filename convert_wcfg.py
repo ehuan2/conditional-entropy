@@ -110,7 +110,8 @@ if __name__ == '__main__':
     graph = to_chomsky_normal_form(graph)
     # next, we need to get the total weights before cleaning
     total_weights = get_total_weights(graph)
-    if args.sentence:
-        graph = clean_graph(graph, args.sentence)
+
+    # if args.sentence:
+    #     graph = clean_graph(graph, args.sentence)
 
     output_pcfg(graph, args.output, total_weights)
