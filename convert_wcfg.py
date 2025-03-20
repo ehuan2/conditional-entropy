@@ -62,6 +62,24 @@ def get_total_weights(graph):
     return total_weights
     
 
+def modify_literals(graph):
+    for key in graph.keys():
+        new_rules = {}
+
+        for rule, weight in graph[key].items():
+            is_literal = (rule.strip("'") != rule) and len(rule.split(' ')) == 1
+
+            if not is_literal:
+                new_rules[rule] = weight
+                continue
+            
+            new_rule = rule.strip("'")
+            new_rule = f'"{new_rule}"'
+            new_rules[new_rule] = weight
+
+        graph[key] = new_rules
+
+
 def clean_graph(graph, input_sentence):
     # given a certain graph, this function cleans it by looking at literals not in the given sentence
     # and then eliminates any rules that directly correspond with creating that literal
@@ -114,4 +132,5 @@ if __name__ == '__main__':
     # if args.sentence:
     #     graph = clean_graph(graph, args.sentence)
 
+    modify_literals(graph)
     output_pcfg(graph, args.output, total_weights)
