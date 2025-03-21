@@ -23,6 +23,38 @@ def parse_wcfg(file_path):
     return graph
 
 
+def to_chomsky_normal_form(graph):
+    # modifies the graph such that it changes it to a chomsky normal form
+    cn_graph = {}
+    for key in graph.keys():
+        cn_graph[key] = {}
+
+        for i, rule_weight in enumerate(graph[key].items()):
+            rule, weight = rule_weight
+            expansion = rule.split(' ')
+
+            # if it is already chomsky normal, ignore it
+            if len(expansion) <= 2:
+                cn_graph[key][rule] = weight
+                continue
+
+            # j = 0 is a special case
+            next_key = f'CNF_{key}_{i}_0'
+            cn_graph[key][f'{expansion[0]} {next_key}'] = weight
+
+            for j in range(1, len(expansion) - 2):
+                temp_key = f'CNF_{key}_{i}_{j}'
+                cn_graph[next_key] = {f'{expansion[j]} {temp_key}' : 1}
+                next_key = temp_key
+
+            # j = len(expansion) - 1 is also a speical case
+            cn_graph[next_key] = {
+                f'{expansion[len(expansion) - 2]} {expansion[len(expansion) - 1]}' : 1
+            }
+
+    return cn_graph
+
+
 def get_total_weights(graph):
     total_weights = {}
     for key in graph.keys():
@@ -46,7 +78,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     graph = parse_wcfg(args.input)
-
+    graph = to_chomsky_normal_form(graph)
     # next, we need to get the total weights before cleaning
     total_weights = get_total_weights(graph)
 
