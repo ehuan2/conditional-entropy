@@ -171,9 +171,7 @@ class PCFG(object):
             cols.append(right_idx)
             data.append(mat_dict[(left_idx, right_idx)])
         print("Finished the matrix dictionary appending to rows and columns")
-        
-        mat_dict = None
-        
+       
         matrix = csc_matrix((data, (rows, cols)), 
             shape=(len(self.idx2nt), len(self.idx2nt)))
         
