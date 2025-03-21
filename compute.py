@@ -26,7 +26,7 @@ if __name__ == '__main__':
     )
     print(f'Finished conditional_entropy')
 
-    output_title = 'Prob \t\t Entropy \t Word'
+    output_title = 'Prob      \t\t Entropy \t Word'
     output_format = '{:.5e} \t\t {:.5e} \t {:s}'
     
     print(output_title)
